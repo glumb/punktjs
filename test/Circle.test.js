@@ -1,5 +1,5 @@
 var assert = require('assert');
-var Circle = require('../libNew/Circle-compiled');
+var Circle = require('../lib/Circle-compiled');
 
 describe('Circle', function () {
     describe('#construct', function () {
