@@ -24,6 +24,22 @@ describe('Point', function () {
             assert.equal(point.y, 4);
         });
     });
+    describe('#x', function () {
+        it('should be possible to set the absolute x coordinate', function () {
+            var point = new Point(2, 4);
+            point.x = 10
+            assert.equal(point.x, 10);
+            assert.equal(point.y, 4);
+        });
+    });
+    describe('#y', function () {
+        it('should be possible to set the absolute y coordinate', function () {
+            var point = new Point(2, 4);
+            point.y = 10
+            assert.equal(point.x, 2);
+            assert.equal(point.y, 10);
+        });
+    });
     describe('#_parseArgs', function () {
         var tests = [
             {args: [2, 4], name: 'two coordinates'},
@@ -41,9 +57,17 @@ describe('Point', function () {
         });
     });
     describe('#add', function () {
-        it('should add to x and y', function () {
+        it('should add to x and y and return a new Point', function () {
             var point = new Point(2, 4);
             point = point.add(2, 4);
+            assert.equal(point.x, 4);
+            assert.equal(point.y, 8);
+        });
+    });
+    describe('#addSelf', function () {
+        it('should add to x and y to the same Point', function () {
+            var point = new Point(2, 4);
+            point.addSelf(2, 4);
             assert.equal(point.x, 4);
             assert.equal(point.y, 8);
         });

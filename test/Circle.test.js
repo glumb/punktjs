@@ -85,6 +85,21 @@ describe('Circle', function () {
             });
         });
     });
+    describe('#getBoundingBox', function () {
+
+        it('should return 4 points', function () {
+            var c1 = new Circle([0, 0], 2);
+            var bb = c1.getBoundingBox();
+            assert.equal(bb[0].x, -2);
+            assert.equal(bb[0].y, 2);
+            assert.equal(bb[1].x, 2);
+            assert.equal(bb[1].y, 2);
+            assert.equal(bb[2].x, 2);
+            assert.equal(bb[2].y, -2);
+            assert.equal(bb[3].x, -2);
+            assert.equal(bb[3].y, -2);
+        });
+    });
     describe('#instersect', function () {
 
         it('should be outside', function () {
