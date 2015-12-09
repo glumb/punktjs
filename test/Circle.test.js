@@ -1,13 +1,13 @@
 var assert = require('assert');
-var Circle = require('../lib/Circle-compiled');
+var Circle = require('../lib/Circle').Circle;
 
 describe('Circle', function () {
     describe('#construct', function () {
 
         it('should be constructable from a Point and a radius', function () {
             var circle = new Circle([2, 4], 6);
-            assert.equal(circle.center.x, 2);
-            assert.equal(circle.center.y, 4);
+            assert.equal(circle.position.x, 2);
+            assert.equal(circle.position.y, 4);
         });
     });
     describe('#area', function () {

@@ -1,5 +1,5 @@
 var assert = require('assert');
-var Point = require('../lib/Point-compiled');
+var Point = require('../lib/Point').ExtendedPoint;
 
 describe('Point', function () {
     describe('#construct', function () {
