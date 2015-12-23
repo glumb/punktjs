@@ -1,5 +1,5 @@
 var assert = require('assert');
-var Circle = require('../lib/Circle').Circle;
+var Circle = require('../lib/index').Circle;
 
 describe('Circle', function () {
     describe('#construct', function () {
@@ -26,28 +26,28 @@ describe('Circle', function () {
         });
     });
     describe('#center', function () {
-        describe('#x', function () {
+        describe('#x$', function () {
 
             it('shoud return the absolut x value', function () {
                 var circle = new Circle([2, 4], 6);
-                assert.equal(circle.center.x, 2);
+                assert.equal(circle.center.x$, 2);
             });
             it('shoud change the absolut x value', function () {
                 var circle = new Circle([2, 4], 6);
                 circle.center = [3, 5]
-                assert.equal(circle.center.x, 5);
+                assert.equal(circle.center.x$, 5);
             });
         });
-        describe('#y', function () {
+        describe('#y$', function () {
 
             it('shoud return the absolut y value', function () {
                 var circle = new Circle([2, 4], 6);
-                assert.equal(circle.center.y, 4);
+                assert.equal(circle.center.y$, 4);
             });
             it('shoud change the absolut y value', function () {
                 var circle = new Circle([2, 4], 6);
                 circle.center = [3, 5]
-                assert.equal(circle.center.y, 9);
+                assert.equal(circle.center.y$, 9);
             });
         });
         describe('#relativeX', function () {
@@ -55,16 +55,19 @@ describe('Circle', function () {
             it('shoud return the relative x value', function () {
                 var circle = new Circle([2, 4], 6);
                 assert.equal(circle.center.relativeX, 0);
+                assert.equal(circle.center.x, 0);
             });
             it('shoud not change the relative x value', function () {
                 var circle = new Circle([2, 4], 6);
                 circle.position = [33, 56]
                 assert.equal(circle.center.relativeX, 0);
+                assert.equal(circle.center.x, 0);
             });
             it('shoud change the relative x value', function () {
                 var circle = new Circle([2, 4], 6);
                 circle.center = [33, 56]
                 assert.equal(circle.center.relativeX, 33);
+                assert.equal(circle.center.x, 33);
             });
         });
         describe('#relativeY', function () {
@@ -72,16 +75,19 @@ describe('Circle', function () {
             it('shoud return the relative y value', function () {
                 var circle = new Circle([2, 4], 6);
                 assert.equal(circle.center.relativeY, 0);
+                assert.equal(circle.center.y, 0);
             });
             it('shoud not change the relative y value', function () {
                 var circle = new Circle([2, 4], 6);
                 circle.position = [33, 56]
                 assert.equal(circle.center.relativeY, 0);
+                assert.equal(circle.center.y, 0);
             });
             it('shoud change the relative y value', function () {
                 var circle = new Circle([2, 4], 6);
                 circle.center = [33, 56]
                 assert.equal(circle.center.relativeY, 56);
+                assert.equal(circle.center.y, 56);
             });
         });
     });

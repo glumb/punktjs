@@ -1,5 +1,5 @@
 import { Shape } from './Shape'
-import { ExtendedPoint as Point } from './Point'
+import { Point } from './Point'
 
 /**
  * @Class Circle

@@ -1,113 +1,24 @@
-import { ExtendedPoint as Point } from './Point'
+import { Point } from './Point'
+import { Base } from './Base'
 import { Matrix } from './Matrix'
 
 /**
  *
  */
-class Shape {
+class Shape extends Base {
 
     /**
      * Shape
      *
      */
     constructor(position = [0, 0], rotation = 0) {
-        this._position = new Point(position)
-        this.rotation = rotation
-        this._children = []
-    }
-
-    set scale(scale) {
-        this._scale = scale
-    }
-
-    set rotation(rotation) {
-        this._rotation = rotation % 360
-        this._rotationRad = this._rotation / 180 * Math.PI
-    }
-
-    get rotation() {
-        return this._rotation
-    }
-
-    get absRotation() {
-        if(this._parent){
-            return this._parent.absRotation + this._rotation
-        }
-
-        return this._rotation
-    }
-
-    set position(p) {
-        this._position.set(p)
-    }
-
-    get position() {
-        return this._position
-    }
-
-    set parent(parent){ //todo a COS may extend a Point: Point+rotation=COS
-        this._parent = parent //remove this and rely on position.parent only?
-        this._position._parent = parent//todo check if thats right. or just add the parent to the PositionPoint
+        super(position, rotation)
     }
 
     getBoundingBox() {
 
     }
 
-    /**
-     *
-     * @returns {Matrix}
-     */
-    getAbsoluteMatrix() {
-        if (this._parent) {
-            return this._parent.getAbsoluteMatrix().multiply(this.getMatrix())
-        } else {
-            return this.getMatrix()
-        }
-    }
-
-    getMatrix() {
-        //todo cache matrix?
-        var rotation = new Matrix({
-            a: Math.cos(this._rotationRad), b: -Math.sin(this._rotationRad), tx: 0,
-            c: Math.sin(this._rotationRad), d: Math.cos(this._rotationRad), ty: 0
-        })
-
-        var translation = new Matrix({
-            a: 1, b: 0, tx: this._position._x,
-            c: 0, d: 1, ty: this._position._y
-        })
-
-
-
-        return translation.multiply(rotation)
-    }
-
-    addChild(child) {
-        this.link(child, this)
-        return this
-    }
-
-    setParent(parent) {
-        this.link(this, parent)
-        return this
-    }
-
-    /**
-     *
-     * @param {Shape|Point} child
-     * @param {Shape} parent
-     */
-    link(child, parent) {
-        parent._children.push(child)
-        child.parent = parent
-    }
-
-    transformBase() {
-        if (this._parent) {
-
-        }
-    }
 
     intersect(Shape) {
         //or add the type to the object this.type - nah
@@ -128,7 +39,7 @@ class Shape {
         var r_min = Math.abs(r1 - r2)
 
         // Determine actual distance between circle circles
-        var c_dist = c1.distance(c2)
+        var c_dist = c1.distance$(c2.position$)
 
         if (c_dist > r_max) {
             result = new Intersection(TestResult.OUTSIDE)
@@ -144,18 +55,25 @@ class Shape {
             var b = (c_dist == 0) ? 0 : h / c_dist
 
 
+            var px = p.x$
+            var py = p.y$
+            var c1x = c1.x$
+            var c1y = c1.y$
+            var c2x = c2.x$
+            var c2y = c2.y$
+
             points.push(
                 new Point(
-                    p.x - b * (c2.y - c1.y),
-                    p.y + b * (c2.x - c1.x)
+                    px - b * (c2y - c1y),
+                    py + b * (c2x - c1x)
                 )
             )
 
-            if (b !== 0) //on.y one touching point
+            if (b !== 0) //only one touching point
                 points.push(
                     new Point(
-                        p.x + b * (c2.y - c1.y),
-                        p.y - b * (c2.x - c1.x)
+                        px + b * (c2y - c1y),
+                        py - b * (c2x - c1x)
                     )
                 )
 
