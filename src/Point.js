@@ -1,9 +1,7 @@
 import { Matrix } from './Matrix'
 import { Hierarchy } from './Hierarchy'
 
-/**
- * @Class Point
- */
+
 class Point extends Hierarchy {
 
     /**

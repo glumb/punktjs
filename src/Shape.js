@@ -2,9 +2,7 @@ import { Point } from './Point'
 import { Base } from './Base'
 import { Matrix } from './Matrix'
 
-/**
- * @Class Shape
- */
+
 class Shape extends Base {
 
     /**

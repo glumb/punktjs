@@ -27,6 +27,6 @@
     "post-install": "npm run compile",
     "test": "mocha",
     "test-coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec ./test/",
-    "docs": "jsdoc2md --example-lang js lib/*.js > api.md"
+    "docs": "jsdoc2md --example-lang js src/*.js > api.md"
   }
 }

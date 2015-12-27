@@ -1,6 +1,3 @@
-/**
- * @Class Hierarchy
- */
 class Hierarchy {
 
     constructor(parent = null, children = []) {

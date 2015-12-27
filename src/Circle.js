@@ -1,9 +1,6 @@
 import { Shape } from './Shape'
 import { Point } from './Point'
 
-/**
- * @Class Circle
- */
 class Circle extends Shape {
 
     /**
