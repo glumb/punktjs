@@ -20,6 +20,7 @@ class Base extends Point {
 
         // create matrices here to prevent using a new one when its parameters change
         this._matrix = new Matrix()
+        this._matrix$ = new Matrix()
         this._matrixCache = null
         this._matrixCache$ = null
     }
@@ -95,8 +96,19 @@ class Base extends Point {
      */
     _changed() {
         this._matrixCache = null
-        super._changed()
-        //super._changed() //is very slow due to babel compile
+
+        /**
+         *  TODO to be replaced by super._changed() when the super implementations performance is better
+         */
+        this._positionCache$ = null
+
+        this._emit('changed')
+        if (this._parent) {
+            this._parent._childChanged(this)
+        }
+        for (let child of this._children) {
+            child._parentChanged(true)
+        }
     }
 
     /**
@@ -104,9 +116,16 @@ class Base extends Point {
      * @private
      */
     _parentChanged() {
-        super._parentChanged()
         this._matrixCache$ = null
-        //super._parentChanged() //is very slow due to babel compile
+
+        /**
+         *  TODO to be replaced by super._parentChanged() when the super implementations performance is better
+         */
+
+        this._positionCache$ = null
+        for (let child of this._children) {
+            child._parentChanged(false)
+        }
     }
 
 
@@ -122,7 +141,8 @@ class Base extends Point {
             return this._matrixCache$
         } else if (this._parent && (!levels || --levels >= 0)) {
             if (!levels) {
-                this._matrixCache$ = this._parent.getMatrix$(levels).multiply(this._getMatrix())
+                // pre-multiplySelf to not create a new Matrix object, as multiply does
+                this._matrixCache$ = this._matrix$.cloneProperties(this._getMatrix()).multiplySelf_(this._parent.getMatrix$(levels))
                 return this._matrixCache$
             }
             return this._parent.getMatrix$(levels).multiply(this._getMatrix())
