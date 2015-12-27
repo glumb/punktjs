@@ -53,4 +53,28 @@ describe('Base', function () {
             assert.notEqual(base2.position.y, 6);
         });
     });
+
+    describe('+children', function () {
+
+        it('should update the children\'s coordinates when the parent changes', function () {
+            var base0 = new Base();
+            var base1 = new Base();
+            var base2 = new Base();
+            var testBase = new Base();
+            base0.position = [40, 10]
+            base0.addChild(base1)
+            base1.position = [20, 44]
+            base1.addChild(base2)
+            base1.addChild(testBase)
+
+            base0.rotation = 34
+            assert.equal(base2.position.x$, testBase.position.x$)
+            base2.parent = base0
+            assert.notEqual(base2.position.x$, testBase.position.x$)
+            base0.rotation = 0
+
+            assert.notEqual(base2.position.x$, 5);
+
+        });
+    });
 });

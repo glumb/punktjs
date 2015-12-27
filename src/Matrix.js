@@ -8,7 +8,7 @@ class Matrix {
         this._tx = a.tx || tx
         this._ty = a.ty || ty
 
-        //todo decompose
+        //todo decompose no?!
         this._translation = {x: tx, y: ty}
         this._rotation = 0
         this._scale = 0
@@ -21,6 +21,17 @@ class Matrix {
         this._d = 1
         this._tx = 0
         this._ty = 0
+
+        return this
+    }
+
+    cloneProperties(m) {
+        this._a = m._a
+        this._b = m._b
+        this._c = m._c
+        this._d = m._d
+        this._tx = m._tx
+        this._ty = m._ty
 
         return this
     }
@@ -117,8 +128,26 @@ class Matrix {
         return this
     }
 
+    //todo consider using this._calculates$ to cache the values
+    //if the values are not calculated, mark them as stale
+    setProperties(rotation = 0, translationX = 0, translationY = 0, scale = 1) {
+
+        var cos = Math.cos(rotation)
+        var sin = Math.sin(rotation)
+
+
+        this._a = scale * cos
+        this._b = -sin
+        this._tx = translationX
+        this._c = sin
+        this._d = scale * cos
+        this._ty = translationY
+
+        return this
+    }
+
     /**
-     * post m * this
+     * pre m * this
      *
      * @param {Matrix} m
      *
@@ -169,6 +198,7 @@ class Matrix {
         return this
     }
 
+    //todo may lead to incremental errors
     set rotation(rotationRad) {//todo rotation is applied after the other transformations, does this still make sense?
         let rotate = rotationRad - this._rotation
         this._rotation = rotationRad

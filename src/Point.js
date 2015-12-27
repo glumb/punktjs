@@ -89,12 +89,24 @@ class Point extends Hierarchy {
     }
 
     _parentChanged() {
-        this._changed()
+        this._positionCache$ = null
     }
 
     _changed() {
         this._positionCache$ = null
-        super._changed()
+
+
+        /**
+         *  TODO to be replaced by super._changed() when the super implementations performance is better
+         */
+
+        this._emit('changed')
+        if (this._parent) {
+            this._parent._childChanged(this)
+        }
+        for (let child of this._children) {
+            child._parentChanged(true)
+        }
     }
 
     /**
