@@ -1,5 +1,5 @@
 /**
- *
+ * @Class Hierarchy
  */
 class Hierarchy {
 

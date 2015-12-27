@@ -71,33 +71,4 @@ class Circle extends Shape {
 
 }
 
-class cachedCircle extends Circle {
-
-    /**
-     * Shape
-     *
-     * @param {Array|Object} arg0 - Point
-     * @param {Number} arg1 - _radius
-     */
-    constructor(arg0, arg1) {
-        super(arg0, arg1)
-
-        this.cache = {}
-        this.cache.area = this.area
-    }
-
-    set radius(r) {
-        this.cache.area = null
-        super.radius = r
-    }
-
-    get area() {
-        return (this.cache.area) ? this.cache.area : this._radius * this._radius * Math.PI
-    }
-
-}
-
-// new Cached.Circle()
-// new Friendly.Point()
-
 export { Circle }

@@ -4,7 +4,7 @@ import { Base } from './Base'
 
 
 /**
- *
+ * @Class Path
  */
 class Path extends Shape {
 
