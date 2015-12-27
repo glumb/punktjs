@@ -25,6 +25,7 @@ class Path extends Shape {
 
         this._curves = []
 
+        if(segments)
         for (let segment of segments) {
             this.appendSegment(segment)
         }
@@ -65,10 +66,10 @@ Path.Curve = class {
         this._segment1 = segment1
         this._lengthCache = null
 
-        this._segment0.on('child.changed', v => {
+        this._segment0._handleOut._on('changed', v => {
             this._lengthCache = null
         })
-        this._segment1.on('child.changed', v => {
+        this._segment1._handleIn._on('changed', v => {
             this._lengthCache = null
         })
     }
@@ -164,7 +165,7 @@ Path.Segment = class extends Base {
         super(position)
         this._handleIn = new Point(handleIn)
         this._handleOut = new Point(handleOut)
-        this._listeners = {}
+
         this.addChild(this._handleIn)
         this.addChild(this._handleOut)
     }
@@ -187,24 +188,6 @@ Path.Segment = class extends Base {
 
     set handleOut(handle) {
         this._handleOut.set(handle)
-    }
-
-    _childChanged(child) {
-        this.emit("child.changed")
-    }
-
-    on(type, cb) {
-        if (!this._listeners[type])
-            this._listeners[type] = []
-
-        this._listeners[type].push(cb)
-    }
-
-    emit(type, value) {
-        var listener = this._listeners[type]
-        for (let cb of listener) {
-            cb(value)
-        }
     }
 
     /**

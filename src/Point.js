@@ -1,9 +1,10 @@
 import { Matrix } from './Matrix'
+import { Hierarchy } from './Hierarchy'
 
 /**
  *
  */
-class Point {
+class Point extends Hierarchy {
 
     /**
      * Creates a Point object with the given x and y coordinates.
@@ -19,6 +20,8 @@ class Point {
      * new Point(new Point(5, 7));
      */
     constructor(arg0 = 0, arg1) {
+        super()
+
         let pos = Point._parsePositionArgs(arg0, arg1)
 
         this._x = pos.x;
@@ -91,9 +94,7 @@ class Point {
 
     _changed() {
         this._positionCache$ = null
-        if(this._parent){
-            this._parent._childChanged(this)
-        }
+        super._changed()
     }
 
     /**
@@ -285,23 +286,6 @@ class Point {
         pos = Point._parsePositionArgs(pos)
         this._x = pos.x
         this._y = pos.y
-    }
-
-    /**
-     *
-     * @param {Shape} p
-     */
-    set parent(p) {//todo fix that. look into shape set
-        this._parent = p
-    }
-
-    /**
-     *
-     * @param {Shape} p
-     */
-    setParent(p) {//todo fix that. look into shape set
-        this._parent = p
-        return this
     }
 
     /**

@@ -17,8 +17,6 @@ class Base extends Point {
         this._rotation = rotation % 360
         this._rotationRad = this._rotation / 180 * Math.PI
         this._scale = scale
-        this._children = []
-        this._parent = null
 
         // create matrices here to prevent using a new one when its parameters change
         this._matrix = new Matrix()
@@ -78,7 +76,7 @@ class Base extends Point {
      */
     set position(p) {
         this.set(p)
-        this._matrixCache = null
+        this._changed()
     }
 
     /**
@@ -96,11 +94,8 @@ class Base extends Point {
      * @private
      */
     _changed() {
-        for (let child of this._children) {
-            if (child._parentChanged) child._parentChanged()
-        }
         this._matrixCache = null
-        this._positionCache$ = null
+        super._changed()
         //super._changed() //is very slow due to babel compile
     }
 
@@ -109,24 +104,11 @@ class Base extends Point {
      * @private
      */
     _parentChanged() {
-        for (let child of this._children) {
-            if (child._parentChanged) child._parentChanged()
-        }
+        super._parentChanged()
         this._matrixCache$ = null
-        this._positionCache$ = null
         //super._parentChanged() //is very slow due to babel compile
     }
 
-    _childChanged(child){
-        if(this._parent){
-            this._parent._childChanged(this)
-        }
-    }
-
-    set parent(parent) { //todo a COS may extend a Point: Point+rotation=COS
-        this._parent = parent //remove this and rely on position.parent only?
-        //this._position._parent = parent//todo check if thats right. or just add the parent to the PositionPoint
-    }
 
     /**
      *
@@ -177,26 +159,6 @@ class Base extends Point {
      */
     get matrix() {
         return this._getMatrix()
-    }
-
-    addChild(child) {
-        this.link(child, this)
-        return this
-    }
-
-    setParent(parent) {
-        this.link(this, parent)
-        return this
-    }
-
-    /**
-     *
-     * @param {Shape|Point} child
-     * @param {Shape} parent
-     */
-    link(child, parent) {
-        parent._children.push(child)
-        child.parent = parent
     }
 
     transformBase() {
