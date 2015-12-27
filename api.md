@@ -7,6 +7,8 @@
 <dd></dd>
 <dt><a href="#CoordinateSystem">CoordinateSystem</a></dt>
 <dd></dd>
+<dt><a href="#Hierarchy">Hierarchy</a></dt>
+<dd></dd>
 <dt><a href="#Matrix">Matrix</a></dt>
 <dd></dd>
 <dt><a href="#Path">Path</a></dt>
@@ -120,6 +122,73 @@ Shape
 <a name="CoordinateSystem"></a>
 ## CoordinateSystem
 **Kind**: global class  
+<a name="Hierarchy"></a>
+## Hierarchy
+**Kind**: global class  
+
+* [Hierarchy](#Hierarchy)
+    * [.children](#Hierarchy+children) ⇒ <code>[Array.&lt;Hierarchy&gt;](#Hierarchy)</code>
+    * [.parent](#Hierarchy+parent)
+    * [.parent](#Hierarchy+parent) ⇒ <code>[Hierarchy](#Hierarchy)</code>
+    * [.addChildren(children)](#Hierarchy+addChildren) ⇒ <code>[Hierarchy](#Hierarchy)</code>
+    * [.hasChildren()](#Hierarchy+hasChildren) ⇒ <code>boolean</code>
+    * [.hasParent()](#Hierarchy+hasParent) ⇒ <code>boolean</code>
+    * [.setParent(p)](#Hierarchy+setParent) ⇒ <code>[Hierarchy](#Hierarchy)</code>
+    * [.removeChild(child)](#Hierarchy+removeChild)
+    * [.removeChildren(children)](#Hierarchy+removeChildren)
+
+<a name="Hierarchy+children"></a>
+### hierarchy.children ⇒ <code>[Array.&lt;Hierarchy&gt;](#Hierarchy)</code>
+**Kind**: instance property of <code>[Hierarchy](#Hierarchy)</code>  
+<a name="Hierarchy+parent"></a>
+### hierarchy.parent
+**Kind**: instance property of <code>[Hierarchy](#Hierarchy)</code>  
+
+| Param | Type |
+| --- | --- |
+| p | <code>[Hierarchy](#Hierarchy)</code> | 
+
+<a name="Hierarchy+parent"></a>
+### hierarchy.parent ⇒ <code>[Hierarchy](#Hierarchy)</code>
+**Kind**: instance property of <code>[Hierarchy](#Hierarchy)</code>  
+<a name="Hierarchy+addChildren"></a>
+### hierarchy.addChildren(children) ⇒ <code>[Hierarchy](#Hierarchy)</code>
+**Kind**: instance method of <code>[Hierarchy](#Hierarchy)</code>  
+
+| Param | Type |
+| --- | --- |
+| children | <code>[Hierarchy](#Hierarchy)</code> | 
+
+<a name="Hierarchy+hasChildren"></a>
+### hierarchy.hasChildren() ⇒ <code>boolean</code>
+**Kind**: instance method of <code>[Hierarchy](#Hierarchy)</code>  
+<a name="Hierarchy+hasParent"></a>
+### hierarchy.hasParent() ⇒ <code>boolean</code>
+**Kind**: instance method of <code>[Hierarchy](#Hierarchy)</code>  
+<a name="Hierarchy+setParent"></a>
+### hierarchy.setParent(p) ⇒ <code>[Hierarchy](#Hierarchy)</code>
+**Kind**: instance method of <code>[Hierarchy](#Hierarchy)</code>  
+
+| Param |
+| --- |
+| p | 
+
+<a name="Hierarchy+removeChild"></a>
+### hierarchy.removeChild(child)
+**Kind**: instance method of <code>[Hierarchy](#Hierarchy)</code>  
+
+| Param | Type |
+| --- | --- |
+| child | <code>[Hierarchy](#Hierarchy)</code> | 
+
+<a name="Hierarchy+removeChildren"></a>
+### hierarchy.removeChildren(children)
+**Kind**: instance method of <code>[Hierarchy](#Hierarchy)</code>  
+
+| Param | Type |
+| --- | --- |
+| children | <code>[Array.&lt;Hierarchy&gt;](#Hierarchy)</code> | 
+
 <a name="Matrix"></a>
 ## Matrix
 **Kind**: global class  
