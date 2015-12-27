@@ -7,7 +7,11 @@
 <dd></dd>
 <dt><a href="#CoordinateSystem">CoordinateSystem</a></dt>
 <dd></dd>
+<dt><a href="#Matrix">Matrix</a></dt>
+<dd></dd>
 <dt><a href="#Path">Path</a></dt>
+<dd></dd>
+<dt><a href="#Point">Point</a></dt>
 <dd></dd>
 <dt><a href="#RasterRenderer">RasterRenderer</a></dt>
 <dd><p>todo</p>
@@ -30,13 +34,13 @@
     * [new Base()](#new_Base_new)
     * [.rotation$](#Base+rotation$)
     * [.position](#Base+position)
-    * [.position](#Base+position) ⇒ <code>Point</code>
+    * [.position](#Base+position) ⇒ <code>[Point](#Point)</code>
     * [._positionCache$](#Base+_positionCache$)
     * [._positionCache$](#Base+_positionCache$)
     * [.matrix](#Base+matrix)
-    * [.matrix](#Base+matrix) ⇒ <code>Matrix</code>
+    * [.matrix](#Base+matrix) ⇒ <code>[Matrix](#Matrix)</code>
     * [.getRotation$([levels])](#Base+getRotation$) ⇒ <code>Number</code>
-    * [.getMatrix$([levels])](#Base+getMatrix$) ⇒ <code>Matrix</code>
+    * [.getMatrix$([levels])](#Base+getMatrix$) ⇒ <code>[Matrix](#Matrix)</code>
 
 <a name="new_Base_new"></a>
 ### new Base()
@@ -58,10 +62,10 @@ set the absolute rotation
 
 | Param | Type | Description |
 | --- | --- | --- |
-| p | <code>Point</code> | position passed to Point |
+| p | <code>[Point](#Point)</code> | position passed to Point |
 
 <a name="Base+position"></a>
-### base.position ⇒ <code>Point</code>
+### base.position ⇒ <code>[Point](#Point)</code>
 **Kind**: instance property of <code>[Base](#Base)</code>  
 <a name="Base+_positionCache$"></a>
 ### base._positionCache$
@@ -79,10 +83,10 @@ TODO to be replaced by super._parentChanged() when the super implementations per
 
 | Param | Type |
 | --- | --- |
-| m | <code>Matrix</code> | 
+| m | <code>[Matrix](#Matrix)</code> | 
 
 <a name="Base+matrix"></a>
-### base.matrix ⇒ <code>Matrix</code>
+### base.matrix ⇒ <code>[Matrix](#Matrix)</code>
 **Kind**: instance property of <code>[Base](#Base)</code>  
 <a name="Base+getRotation$"></a>
 ### base.getRotation$([levels]) ⇒ <code>Number</code>
@@ -93,7 +97,7 @@ TODO to be replaced by super._parentChanged() when the super implementations per
 | [levels] | <code>Number</code> | how many levels to travel up the hierarchy |
 
 <a name="Base+getMatrix$"></a>
-### base.getMatrix$([levels]) ⇒ <code>Matrix</code>
+### base.getMatrix$([levels]) ⇒ <code>[Matrix](#Matrix)</code>
 **Kind**: instance method of <code>[Base](#Base)</code>  
 
 | Param | Type |
@@ -116,6 +120,99 @@ Shape
 <a name="CoordinateSystem"></a>
 ## CoordinateSystem
 **Kind**: global class  
+<a name="Matrix"></a>
+## Matrix
+**Kind**: global class  
+
+* [Matrix](#Matrix)
+    * [.a](#Matrix+a) ⇒ <code>Number</code>
+    * [.b](#Matrix+b) ⇒ <code>Number</code>
+    * [.c](#Matrix+c) ⇒ <code>Number</code>
+    * [.d](#Matrix+d) ⇒ <code>Number</code>
+    * [.tx](#Matrix+tx) ⇒ <code>Number</code>
+    * [.ty](#Matrix+ty) ⇒ <code>Number</code>
+    * [.multiply(m)](#Matrix+multiply)
+    * [.multiplySelf(m)](#Matrix+multiplySelf)
+    * [.multiplySelf_(m)](#Matrix+multiplySelf_)
+    * [.scale(sx, [sy])](#Matrix+scale)
+    * [.inverse()](#Matrix+inverse) ⇒ <code>[Matrix](#Matrix)</code>
+    * [.determinant()](#Matrix+determinant) ⇒ <code>Number</code>
+    * [.isInvertible()](#Matrix+isInvertible) ⇒ <code>boolean</code>
+
+<a name="Matrix+a"></a>
+### matrix.a ⇒ <code>Number</code>
+**Kind**: instance property of <code>[Matrix](#Matrix)</code>  
+**Returns**: <code>Number</code> - - a  
+<a name="Matrix+b"></a>
+### matrix.b ⇒ <code>Number</code>
+**Kind**: instance property of <code>[Matrix](#Matrix)</code>  
+**Returns**: <code>Number</code> - - b  
+<a name="Matrix+c"></a>
+### matrix.c ⇒ <code>Number</code>
+**Kind**: instance property of <code>[Matrix](#Matrix)</code>  
+**Returns**: <code>Number</code> - - c  
+<a name="Matrix+d"></a>
+### matrix.d ⇒ <code>Number</code>
+**Kind**: instance property of <code>[Matrix](#Matrix)</code>  
+**Returns**: <code>Number</code> - - d  
+<a name="Matrix+tx"></a>
+### matrix.tx ⇒ <code>Number</code>
+**Kind**: instance property of <code>[Matrix](#Matrix)</code>  
+**Returns**: <code>Number</code> - - tx  
+<a name="Matrix+ty"></a>
+### matrix.ty ⇒ <code>Number</code>
+**Kind**: instance property of <code>[Matrix](#Matrix)</code>  
+**Returns**: <code>Number</code> - - ty  
+<a name="Matrix+multiply"></a>
+### matrix.multiply(m)
+mul
+
+**Kind**: instance method of <code>[Matrix](#Matrix)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| m | <code>[Matrix](#Matrix)</code> | [ a b tx ] [ a b tx ] [ c d ty ] [ c d ty ] [ 0 0 1  ] [ 0 0 1  ] |
+
+<a name="Matrix+multiplySelf"></a>
+### matrix.multiplySelf(m)
+post this * m
+
+**Kind**: instance method of <code>[Matrix](#Matrix)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| m | <code>[Matrix](#Matrix)</code> | [ a b tx ] [ a b tx ] [ c d ty ] [ c d ty ] [ 0 0 1  ] [ 0 0 1  ] |
+
+<a name="Matrix+multiplySelf_"></a>
+### matrix.multiplySelf_(m)
+pre m * this
+
+**Kind**: instance method of <code>[Matrix](#Matrix)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| m | <code>[Matrix](#Matrix)</code> | [ a b tx ] [ a b tx ] [ c d ty ] [ c d ty ] [ 0 0 1  ] [ 0 0 1  ] |
+
+<a name="Matrix+scale"></a>
+### matrix.scale(sx, [sy])
+**Kind**: instance method of <code>[Matrix](#Matrix)</code>  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| sx | <code>Number</code> |  | scaling in x, y or only x if no sy given |
+| [sy] | <code>Number</code> | <code>sx</code> | scaling in y direction |
+
+<a name="Matrix+inverse"></a>
+### matrix.inverse() ⇒ <code>[Matrix](#Matrix)</code>
+**Kind**: instance method of <code>[Matrix](#Matrix)</code>  
+<a name="Matrix+determinant"></a>
+### matrix.determinant() ⇒ <code>Number</code>
+**Kind**: instance method of <code>[Matrix](#Matrix)</code>  
+<a name="Matrix+isInvertible"></a>
+### matrix.isInvertible() ⇒ <code>boolean</code>
+Returns true if matrix is invertible
+
+**Kind**: instance method of <code>[Matrix](#Matrix)</code>  
 <a name="Path"></a>
 ## Path
 **Kind**: global class  
@@ -179,13 +276,383 @@ add a segment to the path
 
 | Param | Type |
 | --- | --- |
-| position | <code>Point</code> | 
-| [handleIn] | <code>Point</code> | 
-| [handleOut] | <code>Point</code> | 
+| position | <code>[Point](#Point)</code> | 
+| [handleIn] | <code>[Point](#Point)</code> | 
+| [handleOut] | <code>[Point](#Point)</code> | 
 
 <a name="Path.Segment+hasHandleIn"></a>
 #### segment.hasHandleIn() ⇒ <code>boolean</code>
 **Kind**: instance method of <code>[Segment](#Path.Segment)</code>  
+<a name="Point"></a>
+## Point
+**Kind**: global class  
+
+* [Point](#Point)
+    * [.constructor](#Point+constructor)
+    * [.set](#Point+set) ⇒ <code>Object</code>
+    * [.set$](#Point+set$) ⇒ <code>Object</code>
+    * [.coordinateSystem](#Point+coordinateSystem)
+    * [.position$](#Point+position$) ⇒ <code>[Point](#Point)</code>
+    * [.absoluteX](#Point+absoluteX) ⇒ <code>Number</code>
+    * [.absoluteY](#Point+absoluteY) ⇒ <code>Number</code>
+    * [.relativeX](#Point+relativeX) ⇒ <code>Number</code>
+    * [.relativeY](#Point+relativeY) ⇒ <code>Number</code>
+    * [.x](#Point+x) ⇒ <code>Number</code>
+    * [.x](#Point+x)
+    * [.x$](#Point+x$) ⇒ <code>Number</code>
+    * [.x$](#Point+x$)
+    * [.y$](#Point+y$) ⇒ <code>Number</code>
+    * [.y$](#Point+y$)
+    * [.y](#Point+y) ⇒ <code>Number</code>
+    * [.y](#Point+y)
+    * [.position](#Point+position)
+    * [.length](#Point+length)
+    * [.length](#Point+length) ⇒ <code>Number</code>
+    * [.add](#Point+add) ⇒ <code>Object</code>
+    * [.addSelf](#Point+addSelf) ⇒ <code>Object</code>
+    * [.add](#Point+add) ⇒ <code>Object</code>
+    * [.distance](#Point+distance) ⇒ <code>[Point](#Point)</code>
+    * [.distance$](#Point+distance$) ⇒ <code>[Point](#Point)</code>
+    * [.lerp](#Point+lerp) ⇒ <code>[Point](#Point)</code>
+    * [.lerpSelf](#Point+lerpSelf) ⇒ <code>[Point](#Point)</code>
+    * [._parsePositionArgs](#Point+_parsePositionArgs) ⇒ <code>Object</code>
+    * [.transform(matrix)](#Point+transform) ⇒ <code>[Point](#Point)</code>
+    * [.clone()](#Point+clone) ⇒ <code>[Point](#Point)</code>
+    * [.transformSelf(m)](#Point+transformSelf) ⇒ <code>[Point](#Point)</code>
+    * [.multiplySelf(arg0, arg1)](#Point+multiplySelf) ⇒ <code>[Point](#Point)</code>
+
+<a name="Point+constructor"></a>
+### point.constructor
+Creates a Point object with the given x and y coordinates.
+
+**Kind**: instance property of <code>[Point](#Point)</code>  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| [arg0] | <code>Number</code> &#124; <code>Array</code> &#124; <code>Object</code> | <code>0</code> | 
+| [arg1] | <code>Number</code> |  | 
+
+**Example**  
+```js
+new Point(5, 7);
+new Point([5, 7]);
+new Point({x:5, y:7});
+new Point(new Point(5, 7));
+```
+<a name="Point+set"></a>
+### point.set ⇒ <code>Object</code>
+sets the coordinates
+
+**Kind**: instance property of <code>[Point](#Point)</code>  
+**Returns**: <code>Object</code> - Point  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| arg0 | <code>Number</code> &#124; <code>Array</code> &#124; <code>Object</code> | x |
+| [arg1] | <code>Number</code> | y |
+
+**Example**  
+```js
+point.add(5, 7);
+point.add([5, 7]);
+point.add({x:5, y:7});
+point.add(new Point(5, 7));
+```
+<a name="Point+set$"></a>
+### point.set$ ⇒ <code>Object</code>
+sets the absolute coordinates
+
+**Kind**: instance property of <code>[Point](#Point)</code>  
+**Returns**: <code>Object</code> - Point  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| arg0 | <code>Number</code> &#124; <code>Array</code> &#124; <code>Object</code> | x |
+| [arg1] | <code>Number</code> | y |
+
+**Example**  
+```js
+point.add(5, 7);
+point.add([5, 7]);
+point.add({x:5, y:7});
+point.add(new Point(5, 7));
+```
+<a name="Point+coordinateSystem"></a>
+### point.coordinateSystem
+**Kind**: instance property of <code>[Point](#Point)</code>  
+
+| Param |
+| --- |
+| cos | 
+
+<a name="Point+position$"></a>
+### point.position$ ⇒ <code>[Point](#Point)</code>
+**Kind**: instance property of <code>[Point](#Point)</code>  
+<a name="Point+absoluteX"></a>
+### point.absoluteX ⇒ <code>Number</code>
+**Kind**: instance property of <code>[Point](#Point)</code>  
+<a name="Point+absoluteY"></a>
+### point.absoluteY ⇒ <code>Number</code>
+**Kind**: instance property of <code>[Point](#Point)</code>  
+<a name="Point+relativeX"></a>
+### point.relativeX ⇒ <code>Number</code>
+todo relative coordinates with capital chars
+
+**Kind**: instance property of <code>[Point](#Point)</code>  
+<a name="Point+relativeY"></a>
+### point.relativeY ⇒ <code>Number</code>
+**Kind**: instance property of <code>[Point](#Point)</code>  
+<a name="Point+x"></a>
+### point.x ⇒ <code>Number</code>
+**Kind**: instance property of <code>[Point](#Point)</code>  
+<a name="Point+x"></a>
+### point.x
+**Kind**: instance property of <code>[Point](#Point)</code>  
+
+| Param | Type |
+| --- | --- |
+| x | <code>Number</code> | 
+
+<a name="Point+x$"></a>
+### point.x$ ⇒ <code>Number</code>
+**Kind**: instance property of <code>[Point](#Point)</code>  
+<a name="Point+x$"></a>
+### point.x$
+**Kind**: instance property of <code>[Point](#Point)</code>  
+
+| Param | Type |
+| --- | --- |
+| x$ | <code>Number</code> | 
+
+<a name="Point+y$"></a>
+### point.y$ ⇒ <code>Number</code>
+**Kind**: instance property of <code>[Point](#Point)</code>  
+<a name="Point+y$"></a>
+### point.y$
+**Kind**: instance property of <code>[Point](#Point)</code>  
+
+| Param | Type |
+| --- | --- |
+| y$ | <code>Number</code> | 
+
+<a name="Point+y"></a>
+### point.y ⇒ <code>Number</code>
+**Kind**: instance property of <code>[Point](#Point)</code>  
+<a name="Point+y"></a>
+### point.y
+**Kind**: instance property of <code>[Point](#Point)</code>  
+
+| Param | Type |
+| --- | --- |
+| y | <code>Number</code> | 
+
+<a name="Point+position"></a>
+### point.position
+**Kind**: instance property of <code>[Point](#Point)</code>  
+
+| Param | Type |
+| --- | --- |
+| pos | <code>Number</code> &#124; <code>Array</code> &#124; <code>Object</code> | 
+
+**Example**  
+```js
+Point.position = [5, 7];
+Point.position = {x:5, y:7};
+Point.position = new Point(5, 7);
+```
+<a name="Point+length"></a>
+### point.length
+The the vector to given length
+
+**Kind**: instance property of <code>[Point](#Point)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| l | <code>Number</code> | target length of the vector |
+
+<a name="Point+length"></a>
+### point.length ⇒ <code>Number</code>
+returns the current length
+
+**Kind**: instance property of <code>[Point](#Point)</code>  
+<a name="Point+add"></a>
+### point.add ⇒ <code>Object</code>
+adds and returns a new point
+
+**Kind**: instance property of <code>[Point](#Point)</code>  
+**Returns**: <code>Object</code> - Point  
+
+| Param | Type |
+| --- | --- |
+| arg0 | <code>Number</code> | 
+| arg1 | <code>Number</code> | 
+
+**Example**  
+```js
+point.add(5, 7);
+```
+<a name="Point+addSelf"></a>
+### point.addSelf ⇒ <code>Object</code>
+adds to the current point
+
+**Kind**: instance property of <code>[Point](#Point)</code>  
+**Returns**: <code>Object</code> - Point  
+
+| Param | Type |
+| --- | --- |
+| arg0 | <code>Number</code> &#124; <code>Array</code> &#124; <code>Object</code> | 
+| [arg1] | <code>Number</code> | 
+
+**Example**  
+```js
+point.add(5, 7);
+point.add([5, 7]);
+point.add({x:5, y:7});
+point.add(new Point(5, 7));
+```
+<a name="Point+add"></a>
+### point.add ⇒ <code>Object</code>
+multiplies
+
+**Kind**: instance property of <code>[Point](#Point)</code>  
+**Returns**: <code>Object</code> - Point  
+
+| Param | Type |
+| --- | --- |
+| arg0 | <code>Number</code> | 
+| arg1 | <code>Number</code> | 
+
+**Example**  
+```js
+point.add(5, 7);
+```
+<a name="Point+distance"></a>
+### point.distance ⇒ <code>[Point](#Point)</code>
+returns the distance between the absolute coordinates and a given point
+
+**Kind**: instance property of <code>[Point](#Point)</code>  
+
+| Param | Type |
+| --- | --- |
+| arg0 | <code>Number</code> &#124; <code>Array</code> &#124; <code>Object</code> | 
+| [arg1] | <code>Number</code> | 
+
+**Example**  
+```js
+Point.distance(5, 7);
+Point.distance([5, 7]);
+Point.distance({x:5, y:7});
+Point.distance(new Point(5, 7)); //relative x,y of Point
+Point.distance((new Point(5, 7)).position$); //absolute x,y of Point
+```
+<a name="Point+distance$"></a>
+### point.distance$ ⇒ <code>[Point](#Point)</code>
+returns the distance between the absolute coordinates and a given point
+
+**Kind**: instance property of <code>[Point](#Point)</code>  
+
+| Param | Type |
+| --- | --- |
+| arg0$ | <code>Number</code> &#124; <code>Array</code> &#124; <code>Object</code> | 
+| [arg1$] | <code>Number</code> | 
+
+**Example**  
+```js
+Point.distance$(5, 7);
+Point.distance$([5, 7]);
+Point.distance$({x:5, y:7});
+Point.distance$(new Point(5, 7)); //relative x,y of Point
+Point.distance$((new Point(5, 7)).position$); //absolute x,y of Point
+```
+<a name="Point+lerp"></a>
+### point.lerp ⇒ <code>[Point](#Point)</code>
+**Kind**: instance property of <code>[Point](#Point)</code>  
+
+| Param | Type |
+| --- | --- |
+| arg0 | <code>Number</code> &#124; <code>Array</code> &#124; <code>Object</code> | 
+| [arg1] | <code>Number</code> | 
+| p |  | 
+
+**Example**  
+```js
+Point.lerp(5, 7);
+Point.lerp([5, 7]);
+Point.lerp({x:5, y:7});
+Point.lerp(new Point(5, 7));
+```
+<a name="Point+lerpSelf"></a>
+### point.lerpSelf ⇒ <code>[Point](#Point)</code>
+**Kind**: instance property of <code>[Point](#Point)</code>  
+
+| Param | Type |
+| --- | --- |
+| arg0 | <code>Number</code> &#124; <code>Array</code> &#124; <code>Object</code> | 
+| [arg1] | <code>Number</code> | 
+| p |  | 
+
+**Example**  
+```js
+Point.lerpSelf(5, 7);
+Point.lerpSelf([5, 7]);
+Point.lerpSelf({x:5, y:7});
+Point.lerpSelf(new Point(5, 7));
+```
+<a name="Point+_parsePositionArgs"></a>
+### point._parsePositionArgs ⇒ <code>Object</code>
+parses the input args and returns a point object with x and y coordinates
+
+**Kind**: instance property of <code>[Point](#Point)</code>  
+
+| Param | Type |
+| --- | --- |
+| arg0 | <code>Number</code> &#124; <code>Array</code> &#124; <code>Object</code> | 
+| [arg1] | <code>Number</code> | 
+
+**Example**  
+```js
+_parsePositionArgs(5, 7);
+_parsePositionArgs([5, 7]);
+_parsePositionArgs({x:5, y:7});
+_parsePositionArgs(new Point(5, 7));
+```
+<a name="Point+transform"></a>
+### point.transform(matrix) ⇒ <code>[Point](#Point)</code>
+returns a new transformed Point
+
+**Kind**: instance method of <code>[Point](#Point)</code>  
+
+| Param |
+| --- |
+| matrix | 
+
+<a name="Point+clone"></a>
+### point.clone() ⇒ <code>[Point](#Point)</code>
+returns a copy of the point
+
+**Kind**: instance method of <code>[Point](#Point)</code>  
+<a name="Point+transformSelf"></a>
+### point.transformSelf(m) ⇒ <code>[Point](#Point)</code>
+returns a new transformed Point
+
+**Kind**: instance method of <code>[Point](#Point)</code>  
+**Returns**: <code>[Point](#Point)</code> - [a b tx] [ x ]
+[c d ty] [ y ]
+[0 0 1 ] [ 1 ]  
+
+| Param |
+| --- |
+| m | 
+
+<a name="Point+multiplySelf"></a>
+### point.multiplySelf(arg0, arg1) ⇒ <code>[Point](#Point)</code>
+**Kind**: instance method of <code>[Point](#Point)</code>  
+
+| Param | Description |
+| --- | --- |
+| arg0 | x |
+| arg1 | y |
+
 <a name="RasterRenderer"></a>
 ## RasterRenderer
 todo
