@@ -5,5 +5,6 @@ import {Circle} from './Circle'
 import {Shape} from './Shape'
 import {Matrix} from './Matrix'
 import {Hierarchy} from './Hierarchy'
+import {Group} from './Group'
 
-export {Base, Point, Path, Circle, Shape, Matrix, Hierarchy}
+export {Base, Point, Path, Circle, Shape, Matrix, Hierarchy, Group}

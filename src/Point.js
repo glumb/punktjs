@@ -49,7 +49,7 @@ class Point extends Hierarchy {
         let pos = Point._parsePositionArgs(arg0, arg1)
         this._x = pos.x;
         this._y = pos.y;
-        this._changed()
+        this._changed('matrix')
 
         return this
     }
@@ -75,7 +75,7 @@ class Point extends Hierarchy {
         if (this._parent) {
             this.transformSelf(this._parent.getMatrix$().inverse())
         }
-        this._changed()
+        this._changed('matrix')
 
         return this
     }
@@ -92,7 +92,7 @@ class Point extends Hierarchy {
         this._positionCache$ = null
     }
 
-    _changed() {
+    _changed(what) {
         this._positionCache$ = null
 
 
@@ -172,7 +172,7 @@ class Point extends Hierarchy {
     set x(x) {
         this._x = x
 
-        this._changed()
+        this._changed('matrix')
     }
 
     /**
@@ -195,7 +195,7 @@ class Point extends Hierarchy {
         } else {
             this._x = x$
         }
-        this._changed()
+        this._changed('matrix')
     }
 
     /**
@@ -218,7 +218,7 @@ class Point extends Hierarchy {
         } else {
             this._y = y$
         }
-        this._changed()
+        this._changed('matrix')
     }
 
     /**
@@ -235,7 +235,7 @@ class Point extends Hierarchy {
      */
     set y(y) {
         this._y = y
-        this._changed()
+        this._changed('matrix')
     }
 
     /**
@@ -274,6 +274,7 @@ class Point extends Hierarchy {
         var y = m.c * this._x + m.d * this._y + m.ty
         this._x = x
         this._y = y
+        this._changed('matrix')
 
         return this
     }
@@ -287,7 +288,7 @@ class Point extends Hierarchy {
 
     /**
      * @name Point#position
-     * @param {Number|Array|Object} pos
+     * @param {{x: Number, y: Number}|Number|Array|Object|Point} pos
      *
      * @example
      * Point.position = [5, 7];
@@ -298,6 +299,26 @@ class Point extends Hierarchy {
         pos = Point._parsePositionArgs(pos)
         this._x = pos.x
         this._y = pos.y
+        this._changed('matrix')
+    }
+
+    /**
+     *
+     * @returns {{x: Number, y: Number}|Number|Array|Object|Point}
+     */
+    get position() {
+        return this //todo check if that breaks anything
+    }
+
+    rotate(deg) {
+        let l = this.length,
+            angle = Math.tanh(this._y / this._x),
+            rad = deg * 2 * Math.PI / 360,
+            newAngle = angle + rad
+        this._x = l * Math.cos(newAngle)
+        this._y = l * Math.sin(newAngle)
+
+        return this
     }
 
     /**
@@ -312,6 +333,7 @@ class Point extends Hierarchy {
         let length = this.length
         this._x = l / length * this._x
         this._y = l / length * this._y
+        this._changed('matrix')
     }
 
     /**
@@ -357,6 +379,7 @@ class Point extends Hierarchy {
         let pos = Point._parsePositionArgs(arg0, arg1)
         this._x += pos.x
         this._y += pos.y
+        this._changed('matrix')
         return this
     }
 
@@ -387,6 +410,7 @@ class Point extends Hierarchy {
         let pos = Point._parsePositionArgs(arg0, arg1)
         this._x = pos.x
         this._y = pos.y
+        this._changed('matrix')
         return this
     }
 
@@ -430,7 +454,12 @@ class Point extends Hierarchy {
      * Point.distance$((new Point(5, 7)).position$); //absolute x,y of Point
      */
     distance$(arg0$, arg1$) {
-        let pos = Point._parsePositionArgs(arg0$, arg1$)
+        let pos
+        if (arg0$ instanceof Point) { //use the absolute position if a Point is given
+            pos = arg0$.position$
+        } else {
+            pos = Point._parsePositionArgs(arg0$, arg1$)
+        }
 
         var dx = this.x$ - pos.x;
         var dy = this.y$ - pos.y;
@@ -451,11 +480,41 @@ class Point extends Hierarchy {
      * Point.lerp([5, 7]);
      * Point.lerp({x:5, y:7});
      * Point.lerp(new Point(5, 7));
+     * todo check with lerp$
      */
     lerp(arg0, arg1, p) {
         let pos = Point._parsePositionArgs(arg0, arg1)
         p = p || arg1
         return new Point().set$(
+            this.x$ + (pos.x - this.x$) * p,
+            this.y$ + (pos.y - this.y$) * p
+        )
+    }
+
+    /**
+     *
+     * @name Point#lerp$
+     * @param {Number|Array|Object} arg0
+     * @param {Number} [arg1]
+     * @param p
+     * @returns {Point}
+     *
+     * @example
+     * Point.lerp(5, 7);
+     * Point.lerp([5, 7]);
+     * Point.lerp({x:5, y:7});
+     * Point.lerp(new Point(5, 7));
+     */
+    lerp$(arg0, arg1, p) {
+        let pos
+        if (arg0 instanceof Point) { //use the absolute position if a Point is given
+            pos = arg0.position$
+        } else {
+            pos = Point._parsePositionArgs(arg0, arg1)
+        }
+
+        p = p || arg1
+        return new Point().set(
             this.x$ + (pos.x - this.x$) * p,
             this.y$ + (pos.y - this.y$) * p
         )
@@ -478,8 +537,12 @@ class Point extends Hierarchy {
     lerpSelf(arg0, arg1, p) {
         let pos = Point._parsePositionArgs(arg0, arg1)
 
-        this._x = this.x + (pos.x - this.x) * p
-        this._y = this.y + (pos.y - this.y) * p
+        p = p || arg1
+
+        this._x = this._x + (pos.x - this._x) * p
+        this._y = this._y + (pos.y - this._y) * p
+
+        this._changed('matrix')
         return this
     }
 
@@ -506,6 +569,8 @@ class Point extends Hierarchy {
             res.x = arg0
             res.y = hasY ? arg1 : arg0
         } else if (arg0 instanceof Point) {
+            //todo may return the point, check if that breaks something
+            //todo may also return x$ and y$ along x,y
             res.x = arg0._x
             res.y = arg0._y
         } else if (type === 'undefined' || arg0 === null) {

@@ -13,7 +13,7 @@ class Circle extends Shape {
         super(position)
 
         this._center = new Point(0, 0)
-        this.addChild(this._center)
+        this._addChild(this._center)
         this._radius = radius
     }
 
@@ -27,9 +27,13 @@ class Circle extends Shape {
         return this._center
     }
 
+    _setRadius(r) {
+        this._radius = r
+        this._updateBoundingBoxes()
+    }
 
     set radius(r) {
-        this._radius = r
+        this._setRadius(r)
     }
 
     get radius() {
@@ -41,29 +45,26 @@ class Circle extends Shape {
     }
 
     set area(area) {
-        this._radius = Math.sqrt(area / Math.PI)
+        this._setRadius(Math.sqrt(area / Math.PI))
     }
 
-    getBoundingBox() {
+    _updateBoundingBox() {
+        if (this._boundingBox) { //todo may move this check up into shapes
 
-        var pointTl = new Point(this.center._x - this._radius, this.center._y + this._radius)
-        var pointTr = new Point(this.center._x + this._radius, this.center._y + this._radius)
-        var pointBr = new Point(this.center._x + this._radius, this.center._y - this._radius)
-        var pointBl = new Point(this.center._x - this._radius, this.center._y - this._radius)
+            this._boundingBox[0].set(this.center._x - this._radius, this.center._y + this._radius)
+            this._boundingBox[1].set(this.center._x + this._radius, this.center._y + this._radius)
+            this._boundingBox[2].set(this.center._x + this._radius, this.center._y - this._radius)
+            this._boundingBox[3].set(this.center._x - this._radius, this.center._y - this._radius)
+        }
+    }
+    _updateBoundingBox$() {
+        if (this._boundingBox$) { //todo may move this check up into shapes
 
-        pointTl._parent = this
-        pointTr._parent = this
-        pointBr._parent = this
-        pointBl._parent = this
-
-
-        ;
-        return [
-            pointTl,
-            pointTr,
-            pointBr,
-            pointBl
-        ];
+            this._boundingBox[0].set$(this.center.x$ - this._radius, this.center.y$ + this._radius)
+            this._boundingBox[1].set$(this.center.x$ + this._radius, this.center.y$ + this._radius)
+            this._boundingBox[2].set$(this.center.x$ + this._radius, this.center.y$ - this._radius)
+            this._boundingBox[3].set$(this.center.x$ - this._radius, this.center.y$ - this._radius)
+        }
     }
 
 }

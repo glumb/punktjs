@@ -16,14 +16,14 @@ describe('Hierarchy', function () {
             assert.equal(h.parent, parent)
         })
     })
-    describe('#addChild', function () {
+    describe('#_addChild', function () {
         it('should be possible to add a child', function () {
             var h = new Hierarchy()
             var child = new Hierarchy()
 
-            h.addChild(new Hierarchy())
-            h.addChild(new Hierarchy())
-            h.addChild(child)
+            h._addChild(new Hierarchy())
+            h._addChild(new Hierarchy())
+            h._addChild(child)
 
             assert.equal(h.children[2], child)
             assert.equal(h.children.length, 3)
@@ -34,7 +34,7 @@ describe('Hierarchy', function () {
             var h = new Hierarchy()
             var child = new Hierarchy()
 
-            h.addChildren([new Hierarchy(), new Hierarchy(), child])
+            h._addChildren([new Hierarchy(), new Hierarchy(), child])
 
             h.removeChild(child)
 
@@ -42,12 +42,12 @@ describe('Hierarchy', function () {
             assert.equal(h.children.length, 2)
         })
     })
-    describe('#addChildren', function () {
+    describe('#_addChildren', function () {
         it('should be possible to add children', function () {
             var h = new Hierarchy()
             var child = new Hierarchy()
 
-            h.addChildren([new Hierarchy(), new Hierarchy(), child])
+            h._addChildren([new Hierarchy(), new Hierarchy(), child])
 
             assert.equal(h.children[2], child)
             assert.equal(child.parent, h)
@@ -60,7 +60,7 @@ describe('Hierarchy', function () {
             var child1 = new Hierarchy()
             var child2 = new Hierarchy()
 
-            h.addChildren([new Hierarchy(), child1, child2])
+            h._addChildren([new Hierarchy(), child1, child2])
 
             h.removeChildren([child1, child2])
 
@@ -72,7 +72,7 @@ describe('Hierarchy', function () {
             var child1 = new Hierarchy()
             var child2 = new Hierarchy()
 
-            h.addChildren([new Hierarchy(), child1, child2])
+            h._addChildren([new Hierarchy(), child1, child2])
 
             h.removeChildren()
 
@@ -86,7 +86,7 @@ describe('Hierarchy', function () {
 
             assert.equal(h.hasChildren(), false)
 
-            h.addChildren([new Hierarchy()])
+            h._addChildren([new Hierarchy()])
 
             assert.ok(h.hasChildren())
         })

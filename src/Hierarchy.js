@@ -37,21 +37,10 @@ class Hierarchy {
         Hierarchy._link(child, this)
     }
 
-    addChild(child) {
-        this._addChild(child)
-        return this
-    }
-
-    /**
-     *
-     * @param {Hierarchy} children
-     * @returns {Hierarchy}
-     */
-    addChildren(children) {
+    _addChildren(children) {
         for (let child of children) {
             this._addChild(child)
         }
-        return this
     }
 
     /**
@@ -101,13 +90,13 @@ class Hierarchy {
      *
      * @private
      */
-    _changed() {
+    _changed(what) {
         this._emit('changed')
         if (this._parent) {
-            this._parent._childChanged(this)
+            this._parent._childChanged(this, what)
         }
         for (let child of this._children) {
-            child._parentChanged(true)
+            child._parentChanged(true, what)
         }
     }
 
@@ -120,7 +109,7 @@ class Hierarchy {
         Hierarchy._link(this, parent)
     }
 
-//todo only set properties in provate methods (_method() => this._property = 1)
+//todo only set properties in private methods (_method() => this._property = 1)
     /**
      *
      * @param {Hierarchy} p
@@ -205,7 +194,9 @@ class Hierarchy {
     }
 
     _destroy() {
-        this._parent._removeChild(this)
+        if (this._parent) {
+            this._parent._removeChild(this)
+        }
         for (var i = 0; i < this._children.length; i++) {
             var child = this._children[i];
             child._destroy()

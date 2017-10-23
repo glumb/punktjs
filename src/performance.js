@@ -1,4 +1,4 @@
-import { Circle, Path, Point, Shape, Base } from './index'
+import { Circle, Path, Point, Group, Base } from './index'
 var colors = require('colors');
 
 function test(description, testFunction, iterations = 10000) {
@@ -85,12 +85,12 @@ test('get value$ from Point', {
 test('get value from transformed Point', {
     setup: function (count) {
         var point = new Point(20, 30)
-        var shape = new Shape(10, 5, 30)
-        shape.addChild(point)
-        return {point: point, shape: shape}
+        var group = new Group(10, 5, 30)
+        group.addChild(point)
+        return {point: point, group: group}
     },
     run:   function (obj) {
-        obj.shape.rotation += 5
+        obj.group.rotation += 5
         obj.point.y$
         obj.point.x$
     }
@@ -99,14 +99,14 @@ test('get value from transformed Point', {
 test('get value from transformed Point (2 transformations)', {
     setup: function (count) {
         var point = new Point(20, 30)
-        var shape = new Shape(10, 5, 30)
-        var shape2 = new Shape(16, 5, 40)
-        shape.addChild(point)
-        shape2.addChild(shape)
-        return {point: point, shape: shape}
+        var group = new Group(10, 5, 30)
+        var group2 = new Group(16, 5, 40)
+        group.addChild(point)
+        group2.addChild(group)
+        return {point: point, group: group}
     },
     run:   function (obj) {
-        obj.shape.rotation += 5
+        obj.group.rotation += 5
         obj.point.y$
         obj.point.x$
     }
@@ -115,21 +115,21 @@ test('get value from transformed Point (2 transformations)', {
 test('get value from transformed Point (5 transformations)', {
     setup: function (count) {
         var point = new Point(20, 30)
-        var shape1 = new Base(10, 5, 30)
-        var shape2 = new Base(16, 5, 40)
-        var shape3 = new Base(16, 5, 40)
-        var shape4 = new Base(16, 5, 40)
-        var shape5 = new Base(16, 5, 40)
-        shape1.addChild(point)
-        shape2.addChild(shape1)
-        shape3.addChild(shape2)
-        shape4.addChild(shape3)
-        shape5.addChild(shape4)
+        var group1 = new Base(10, 5, 30)
+        var group2 = new Base(16, 5, 40)
+        var group3 = new Base(16, 5, 40)
+        var group4 = new Base(16, 5, 40)
+        var group5 = new Base(16, 5, 40)
+        group1.addChild(point)
+        group2.addChild(group1)
+        group3.addChild(group2)
+        group4.addChild(group3)
+        group5.addChild(group4)
 
-        return {point: point, shape: shape5}
+        return {point: point, group: group5}
     },
     run:   function (obj) {
-        obj.shape.rotation += 5
+        obj.group.rotation += 5
         obj.point.y$
         obj.point.x$
     }
@@ -138,21 +138,21 @@ test('get value from transformed Point (5 transformations)', {
 test('get value from transformed Point (5 transformations)', {
     setup: function (count) {
         var point = new Point(20, 30)
-        var shape1 = new Base(10, 5, 30)
-        var shape2 = new Base(16, 5, 40)
-        var shape3 = new Base(16, 5, 40)
-        var shape4 = new Base(16, 5, 40)
-        var shape5 = new Base(16, 5, 40)
-        shape1.addChild(point)
-        shape2.addChild(shape1)
-        shape3.addChild(shape2)
-        shape4.addChild(shape3)
-        shape5.addChild(shape4)
+        var group1 = new Base(10, 5, 30)
+        var group2 = new Base(16, 5, 40)
+        var group3 = new Base(16, 5, 40)
+        var group4 = new Base(16, 5, 40)
+        var group5 = new Base(16, 5, 40)
+        group1.addChild(point)
+        group2.addChild(group1)
+        group3.addChild(group2)
+        group4.addChild(group3)
+        group5.addChild(group4)
 
-        return {point: point, shape: shape5}
+        return {point: point, group: group5}
     },
     run:   function (obj) {
-        obj.shape.rotation += 5
+        obj.group.rotation += 5
         obj.point.y$
         obj.point.x$
     }

@@ -18,14 +18,31 @@ class Path extends Shape {
     constructor(arg0 = [0, 0]) {
         let segments = (typeof arg0[0] == 'number') ? [arg0] : arg0
         let position = segments[0]
-        super(position)
+        super()
 
         this._curves = []
 
-        if(segments)
-        for (let segment of segments) {
-            this.appendSegment(segment)
+        if (segments)
+            for (let segment of segments) {
+                this.appendSegment(segment)
+            }
+    }
+
+    _appendSegment(segment) {
+        if (!(segment instanceof Path.Segment)) {
+            segment = new Path.Segment(segment)
         }
+        if (this._children.length > 0) { //there are already Segments in the Path
+            this._curves.push(new Path.Curve(this._children[this._children.length - 1], segment))
+        }
+        this._addChild(segment)
+
+        this._updateBoundingBoxes()
+
+        // todo change this: handle changed, recompute the boundingbox
+        segment._on('childChanged', child => { //todo check the event system. what happens onremove?
+            this._updateBoundingBoxes()
+        })
     }
 
     /**
@@ -34,14 +51,47 @@ class Path extends Shape {
      * @param segment
      */
     appendSegment(segment) {
-        if (!(segment instanceof Path.Segment)) {
-            segment = new Path.Segment(segment)
-        }
-        if (this._children.length > 0) { //there are already Segments in the Path
-            this._curves.push(new Path.Curve(this._children[this._children.length - 1], segment))
-        }
-        this.addChild(segment)
+        this._appendSegment(segment)
 
+        return this
+    }
+
+    removeSegments(indices = Object.keys(this._children)) {
+        function _sortNumber(a, b) {
+            return a - b;
+        }
+
+        indices.sort(_sortNumber);
+
+        for (var i = 0; i < indices.length; i++) {
+            this._removeSegment(indices[i])
+
+            indices = indices.map(function (index) {
+                return --index
+            })
+        }
+    }
+
+    _removeSegment(index) {
+        if (!this._children[index])
+            return
+
+        if (this._curves.length > 0) {
+            if (index == 0) { //first
+                this._curves.splice(index, 1)
+            } else if (index == this._children.length - 1) { //last
+                this._curves.splice(index - 1, 1)
+            } else { //not last
+                this._curves.splice(index - 1, 2, new Path.Curve(this._children[index - 1], this._children[index + 1]))
+            }
+        }
+        this._children.splice(index, 1)
+
+        this._updateBoundingBoxes() //todo add _changedSelf?? or rename Changed => ChangedPosition
+    }
+
+    removeSegment(index) {
+        this._removeSegment(index)
         return this
     }
 
@@ -55,6 +105,85 @@ class Path extends Shape {
 
     get curves() {
         return this._curves
+    }
+
+    _updateBoundingBox() {
+        if (this._boundingBox) {
+            var top = -Infinity, right = -Infinity
+            var bottom = Infinity, left = Infinity
+
+            if (this._children.length == 0) {
+                top = right = bottom = left = 0
+            } else {
+                for (var i = 0; i < this._children.length; i++) {
+                    var child = this._children[i];
+                    var nextChild = this._children[i + 1];
+
+                    if (!child.hasHandleOut() && (!nextChild || !nextChild.hasHandleIn())) { //straight line
+
+                        //console.log(child$.y, child$.x)
+                        if (child.y > top)
+                            top = child.y
+                        if (child.x > right)
+                            right = child.x
+                        if (child.y < bottom)
+                            bottom = child.y
+                        if (child.x < left)
+                            left = child.x
+                    } else if (nextChild) { //if no nextChild$, the last point is reached
+
+                        let curve = this._curves[i]
+                        for (var j = 0; j <= 1; j += 0.05) {
+                            let position = curve._positionAt(j)
+                            let x = position[0], y = position[1]
+
+                            if (y > top)
+                                top = y
+                            if (x > right)
+                                right = x
+                            if (y < bottom)
+                                bottom = y
+                            if (x < left)
+                                left = x
+                        }
+                    }
+                }
+            }
+
+
+            this._boundingBox[0].set(left, top)
+            this._boundingBox[1].set(right, top)
+            this._boundingBox[2].set(right, bottom)
+            this._boundingBox[3].set(left, bottom)
+        }
+    }
+
+    _updateBoundingBox$() {
+        if (this._boundingBox$) { //todo check if bb (-$) is created
+            var top = -Infinity, right = -Infinity
+            var bottom = Infinity, left = Infinity
+
+            if (!this._boundingBox) {
+                this._getBoundingBox()
+            }
+
+            for (let bb of this._boundingBox) {
+                if (bb.y$ > top)
+                    top = bb.y$
+                if (bb.x$ > right)
+                    right = bb.x$
+                if (bb.y$ < bottom)
+                    bottom = bb.y$
+                if (bb.x$ < left)
+                    left = bb.x$
+            }
+
+            this._boundingBox$[0].set$(left, top)
+            this._boundingBox$[1].set$(right, top)
+            this._boundingBox$[2].set$(right, bottom)
+            this._boundingBox$[3].set$(left, bottom)
+        }
+
     }
 }
 Path.Curve = class {
@@ -73,6 +202,10 @@ Path.Curve = class {
 
     set length(l) {
 
+    }
+
+    isLine() {
+        return (!this._segment0.hasHandleOut() && !this._segment1.hasHandleIn())
     }
 
     get length() {
@@ -114,8 +247,8 @@ Path.Curve = class {
         var pointEnd = this._segment1.position
 
         return [
-            this._calculatePointAtPosition(pointStart.x, handleStart.x, handleEnd.x, pointEnd.x, t),
-            this._calculatePointAtPosition(pointStart.y, handleStart.y, handleEnd.y, pointEnd.y, t)
+            this._calculatePointAtPosition(pointStart.x, handleStart.x + pointStart.x, handleEnd.x + pointEnd.x, pointEnd.x, t),
+            this._calculatePointAtPosition(pointStart.y, handleStart.y + pointStart.y, handleEnd.y + pointEnd.y, pointEnd.y, t)
         ]
 
     }
@@ -127,29 +260,31 @@ Path.Curve = class {
         var pointEnd = this._segment1.position
 
         return [
-            this._calculatePointAtPosition(pointStart.x$, handleStart.x, handleEnd.x, pointEnd.x$, t),
-            this._calculatePointAtPosition(pointStart.y$, handleStart.y, handleEnd.y, pointEnd.y$, t)
+            this._calculatePointAtPosition(pointStart.x$, handleStart.x$, handleEnd.x$, pointEnd.x$, t),
+            this._calculatePointAtPosition(pointStart.y$, handleStart.y$, handleEnd.y$, pointEnd.y$, t)
         ]
     }
 
     /**
      *
      * @param {Number} p0 - start Point
-     * @param {Number} h0o - start Point handle out, relative to p0
-     * @param {Number} h1i - end Point handle in, relative to p1
+     * @param {Number} h0o - start Point handle out, absolute
+     * @param {Number} h1i - end Point handle in, absolute
      * @param {Number} p1 - end Point
      * @param {Number} t - value between {0-1} => 0%-100% of the length
      * @returns {number}
      */
     _calculatePointAtPosition(p0, h0o, h1i, p1, t) {
-        h0o += p0 // handles need to be absolute for the calculation
-        h1i += p1
+        if (h0o == 0 && h1i == 0) { //straight line
+            //todo add lerp function
+        }
 
         // simplified (1-t)*(1-t)*(1-t)*a+3*(1-t)*(1-t)*t*b+3*(1-t)*t*t*c+t*t*t*d
         return p0 + (p0 * (-3 + t * (3 - t)) + h0o * (3 + t * (-6 + 3 * t)) + (h1i * ( 3 - 3 * t) + p1 * t) * t) * t;
 
     }
 }
+
 Path.Segment = class extends Base {
 
     /**
@@ -163,8 +298,12 @@ Path.Segment = class extends Base {
         this._handleIn = new Point(handleIn)
         this._handleOut = new Point(handleOut)
 
-        this.addChild(this._handleIn)
-        this.addChild(this._handleOut)
+        this._addChild(this._handleIn)
+        this._addChild(this._handleOut)
+    }
+
+    _childChanged(child) { //send the event up to redraw the boundingbox,when a handle changes
+        this._emit('childChanged', child)
     }
 
     get handleIn() {
@@ -201,3 +340,4 @@ Path.Segment = class extends Base {
 }
 
 export { Path }
+

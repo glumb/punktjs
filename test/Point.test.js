@@ -1,6 +1,6 @@
 var assert = require('assert');
 var Point = require('../lib/index').Point;
-var Shape = require('../lib/index').Shape;
+var Group = require('../lib/index').Group;
 
 describe('Point', function () {
     describe('#construct', function () {
@@ -36,7 +36,7 @@ describe('Point', function () {
     describe('#x$', function () {
         it('should be possible to set the absolute x$ coordinate', function () {
             var point = new Point(2, 4);
-            (new Shape([10, 10], 0)).addChild(point)
+            (new Group([10, 10], 0)).addChild(point)
             assert.equal(point.x, 2);
 
             point.x$ = 15
@@ -46,8 +46,8 @@ describe('Point', function () {
         });
         it('should be possible to set the absolute x$ coordinate', function () {
             var point = new Point(2, 4);
-            var shape = (new Shape([10, 10], 0)).addChild(point);
-            (new Shape([5, 5], 45)).addChild(shape);
+            var group = (new Group([10, 10], 0)).addChild(point);
+            (new Group([5, 5], 45)).addChild(group);
 
             point.x$ = 20
 
@@ -117,6 +117,26 @@ describe('Point', function () {
             var point = new Point();
             point.length = 5;
             assert.equal(point.length, 5);
+        });
+    });
+    describe('#rotate', function () {
+        it('should rotate the vector by 90 deg', function () {
+            var point = new Point(1, 0);
+            point.rotate(90);
+            assert.ok(point.x < 1e-15);
+            assert.equal(point.y, 1);
+        });
+        it('should rotate the vector by 180 deg', function () {
+            var point = new Point(1, 0);
+            point.rotate(180);
+            assert.equal(point.x, -1);
+            assert.ok(point.y < 1e-15);
+        });
+        it('should rotate the vector by -45 deg', function () {
+            var point = new Point(1, 0);
+            point.rotate(-45);
+            assert.ok(point.x > 0.7070 && point.x < 0.7072);
+            assert.ok(point.y < -0.7070 && point.y > -0.7072);
         });
     });
 });

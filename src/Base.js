@@ -24,7 +24,7 @@ class Base extends Point {
 
     set scale(scale) {
         this._scale = scale
-        this._changed()
+        this._changed('matrix')
     }
 
     get scale() {
@@ -34,7 +34,7 @@ class Base extends Point {
     set rotation(rotation) {
         this._rotation = rotation % 360
         this._rotationRad = this._rotation / 180 * Math.PI
-        this._changed()
+        this._changed('matrix')
     }
 
     get rotation() {
@@ -65,7 +65,7 @@ class Base extends Point {
      * @param angle
      */
     set rotation$(angle) {
-        this.rotation = angle - this.rotation$
+        this.rotation = angle - this.rotation$ //todo _setRotation function
     }
 
     /**
@@ -74,7 +74,7 @@ class Base extends Point {
      */
     set position(p) {
         this.set(p)
-        this._changed()
+        this._changed('matrix')
     }
 
     /**
@@ -91,7 +91,7 @@ class Base extends Point {
      *
      * @private
      */
-    _changed() {
+    _changed(what) {
         this._matrixCache = null
 
         /**
@@ -137,7 +137,7 @@ class Base extends Point {
         if (this._matrixCache$) {
             return this._matrixCache$
         } else if (this._parent && (!levels || --levels >= 0)) {
-            if (!levels) {
+            if (!levels) { //no lvls implies that the returned matrix will be absolute and can thus be cached
                 // pre-multiplySelf to not create a new Matrix object, as multiply does
                 this._matrixCache$ = this._matrix$.cloneProperties(this._getMatrix()).multiplySelf_(this._parent.getMatrix$(levels))
                 return this._matrixCache$
@@ -167,7 +167,7 @@ class Base extends Point {
      */
     set matrix(m) {
         this._matrixCache = m
-        this._changed()
+        this._changed('matrix')
     }
 
     /**
